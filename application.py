@@ -36,11 +36,12 @@ class Student(db.Model):
     d_student_prof_ratio = db.Column(db.Integer)
     d_scholarship_likelihood = db.Column(db.Integer)
     d_city_cost = db.Column(db.Integer)
+    d_co_op_availability = db.Column(db.Boolean)
     courses = db.relationship('Student_course', backref='student', lazy=True)
     categories = db.relationship('Student_category', backref='student', lazy=True)
 
 
-    def __init__(self,first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost):
+    def __init__(self,first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost,d_co_op_availability):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -56,12 +57,13 @@ class Student(db.Model):
         self.d_student_prof_ratio = d_student_prof_ratio
         self.d_scholarship_likelihood = d_scholarship_likelihood
         self.d_city_cost = d_city_cost
+        self.d_co_op_availability = d_co_op_availability
 
 # Student Schema - for marshmallow
 class StudentSchema(ma.Schema):
     class Meta: #all the variables you want to see
         strict = True
-        fields = ('student_id','first_name','last_name','email','password','age','d_education_quality','d_ec_opportunity','d_wellbeing','d_community','d_city_size','d_school_size','d_campus_age','d_student_prof_ratio','d_scholarship_likelihood','d_city_cost')
+        fields = ('student_id','first_name','last_name','email','password','age','d_education_quality','d_ec_opportunity','d_wellbeing','d_community','d_city_size','d_school_size','d_campus_age','d_student_prof_ratio','d_scholarship_likelihood','d_city_cost','d_co_op_availability')
 
 # Initiate Student Schema
 student_schema = StudentSchema()
@@ -250,9 +252,7 @@ student_categories_schema = Student_categorySchema(many=True)
 # ENDPOINT - Create a Student
 @application.route('/student-create', methods=['POST'])
 def add_student():
-    req_data = request.get_json()
-
-    first_name = req_data['first_name']
+    first_name = request.json['first_name']
     last_name = request.json['last_name']
     email = request.json['email']
     password = request.json['password']
