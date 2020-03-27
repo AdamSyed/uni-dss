@@ -9,7 +9,7 @@ password = "msci436project"
 
 conn = pymysql.connect(host, user = user, port = port, passwd = password, db=dbname)
 
-# sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='uni_dss'"
+response = pd.read_sql("",con=conn)
 
 # response = pd.read_sql(sql,con=conn)
 
