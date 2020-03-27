@@ -269,9 +269,12 @@ def update_student(id):
 @application.route('/uni-matching', methods = ['GET'])
 def calc_uni_match():
     student = Student.query.get(1)
-
+    #all_unis = University.query.all()
+    #result = universities_schema.dump(all_unis)
+    # return student_schema.jsonify(student), jsonify(result)
     # I want to return only the top 3 universities. This means that I have to get all the info from the student, compare to all the universities,
-     # create an array that will keep all the universities with their scores, and then sort the array and output the 3 unis with the lowest scores
+    # create an array that will keep all the universities with their scores, and then sort the array and output the 3 unis with the lowest scores
+    # keepCalc
     testCalc = np.array([[0,0]])
     score = 0
     for x in range(1,21):
@@ -281,15 +284,28 @@ def calc_uni_match():
         multiplier = 1+ 0.1*(abs(student.d_city_size- currentUni.city_size_index) + abs(student.d_school_size - currentUni.school_size_index) + 
                          abs(student.d_campus_age- currentUni.campus_age_index) + 0.15*abs(student.d_student_prof_ratio - currentUni.student_prof_ratio) +
                          abs(student.d_scholarship_likelihood - currentUni.scholarship_likelihood) +0.5*abs(student.d_city_cost - currentUni.city_cost_index))
+        #score = 1#currentUni.education_quality
+        #multiplier = 1 #+ 0.1*currentUni.city_cost_index
+        
+        #newArray = np.append(testCalc, [[currentUni.university_id, currentUni.wellbeing]], axis = 0)
         newArray = np.append(testCalc, [[currentUni.university_id, score*multiplier]], axis = 0)
         testCalc = newArray
+        #testCalc.append(score*multiplier)
+        #testCalc.append(multiplier)
+        #score = score + x.education_quality + x.ec_opportunity + x.wellbeing + x.community'
         score = 0
+    #testCalc[testCalc[:,1].argsort()]
     test1 = testCalc[testCalc[:,1].argsort()]
+    ##test1 = testCalc
+    #lists = testCalc.tolist()
+    #outList = University.query.get((int)(test1[1,0]))
     first = University.query.get((int)(test1[1,0]))
     second = University.query.get((int)(test1[2,0]))
     third = University.query.get((int)(test1[3,0]))
     outList = [first, second, third]
-    
+    ##lists = test1.tolist()
+    ##json_str = json.dumps(lists)
+    ##return jsonify(json_str)
     return universities_schema.jsonify(outList)
 
 # Run server
