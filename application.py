@@ -295,11 +295,14 @@ def calc_uni_match(id):
     first = University.query.get((int)(test1[1,0]))
     second = University.query.get((int)(test1[2,0]))
     third = University.query.get((int)(test1[3,0]))
-    outList = [first, second, third]
+    outList = [first.university_name, second.university_name, third.university_name]
     ##lists = test1.tolist()
     ##json_str = json.dumps(lists)
     ##return jsonify(json_str)
-    return universities_schema.jsonify(outList)
+    ###return universities_schema.jsonify(outList)
+    return jsonify(outList)
+
+
 
 # Run server
 if __name__ == '__main__':
