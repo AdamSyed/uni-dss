@@ -9,8 +9,10 @@ password = "msci436project"
 
 conn = pymysql.connect(host, user = user, port = port, passwd = password, db=dbname)
 
-response = pd.read_sql("INSERT INTO university VALUES ('1','Algoma University','1520 Queen Street East, Sault Ste. Marie, Ontario, Canada P6A 2G4','73368','1965','1400','20','21','31','28','1','1','4','14','5','2');",con=conn)
+# sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='uni_dss'"
 
-# response = pd.read_sql("SELECT * FROM university",con=conn)
+# response = pd.read_sql(sql,con=conn)
+
+response = pd.read_sql("SELECT * FROM student",con=conn)
 
 print(response)

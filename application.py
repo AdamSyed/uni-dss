@@ -34,6 +34,9 @@ class Student(db.Model):
     d_student_prof_ratio = db.Column(db.Integer)
     d_scholarship_likelihood = db.Column(db.Integer)
     d_city_cost = db.Column(db.Integer)
+    courses = db.relationship('Student_course', backref='student', lazy=True)
+    categories = db.relationship('Student_category', backref='student', lazy=True)
+
 
     def __init__(self,first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost):
         self.first_name = first_name
@@ -183,10 +186,71 @@ class Program_categorySchema(ma.Schema):
 program_category_schema = Program_categorySchema()
 program_categories_schema = Program_categorySchema(many=True)
 
+# Student_course Model/Class - SQLAlchemy
+class Student_course(db.Model):
+    student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'),primary_key=True)
+    course_name = db.Column(db.String(100), primary_key=True)
+    grade = db.Column(db.Integer)
+
+    def __init__(self,student_id,course_name,grade):
+        self.student_id = student_id
+        self.course_name = course_name
+        self.grade = grade
+
+# Student_course Schema - for marshmallow
+class Student_courseSchema(ma.Schema):
+    class Meta: #all the variables you want to see
+        strict = True
+        fields = ('student_id', 'course_name', 'grade')
+
+# Initiate Student_course Schema
+student_course_schema = Student_courseSchema()
+student_courses_schema = Student_courseSchema(many=True)
+
+# Category_course Model/Class - SQLAlchemy
+class Category_course(db.Model):
+    category_name = db.Column(db.String(100),primary_key=True)
+    course_name = db.Column(db.String(100), primary_key=True)
+
+    def __init__(self,category_name,course_name):
+        self.category_name = category_name
+        self.course_name = course_name
+
+# Category_course Schema - for marshmallow
+class Category_courseSchema(ma.Schema):
+    class Meta: #all the variables you want to see
+        strict = True
+        fields = ('category_name', 'course_name')
+
+# Initiate Category_course Schema
+category_course_schema = Category_courseSchema()
+category_courses_schema = Category_courseSchema(many=True)
+
+# Student_category Model/Class - SQLAlchemy
+class Student_category(db.Model):
+    student_id = db.Column(db.Integer,db.ForeignKey('student.student_id'),primary_key=True)
+    category_name = db.Column(db.String(100), primary_key=True)
+
+    def __init__(self,student_id,category_name):
+        self.student_id = student_id
+        self.category_name = category_name
+
+# Student_category Schema - for marshmallow
+class Student_categorySchema(ma.Schema):
+    class Meta: #all the variables you want to see
+        strict = True
+        fields = ('student_id', 'category_name')
+
+# Initiate Student_category Schema
+student_category_schema = Student_categorySchema()
+student_categories_schema = Student_categorySchema(many=True)
+
 # ENDPOINT - Create a Student
 @application.route('/student-create', methods=['POST'])
 def add_student():
-    first_name = request.json['first_name']
+    req_data = request.get_json()
+
+    first_name = req_data['first_name']
     last_name = request.json['last_name']
     email = request.json['email']
     password = request.json['password']
