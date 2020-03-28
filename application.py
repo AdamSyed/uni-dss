@@ -23,7 +23,7 @@ class Student(db.Model):
     student_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer)
     d_education_quality = db.Column(db.Integer)
@@ -267,13 +267,30 @@ def add_student():
     d_student_prof_ratio = request.json['d_student_prof_ratio']
     d_scholarship_likelihood = request.json['d_scholarship_likelihood']
     d_city_cost = request.json['d_city_cost']
+    d_co_op_availability = request.json['d_co_op_availability']
 
-    new_student = Student(first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost)
+
+    new_student = Student(first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost,d_co_op_availability)
 
     db.session.add(new_student)
     db.session.commit()
 
     return student_schema.jsonify(new_student)
+
+# ENDPOINT - Login
+@application.route('/login', methods=['POST'])
+def check_login_creds():
+    email = request.json['email']
+    password = request.json['password']
+
+    student = Student.query.filter_by(email=email, password=password).first()
+
+    if bool(student) == True:
+        response = str(student.student_id)
+    else:
+        response = "Invalid credentials."
+
+    return response
 
 # ENDPOINT - Get all students
 @application.route('/students-all',methods=['GET'])

@@ -12,7 +12,7 @@ mycursor = mydb.cursor()
 
 # sql = "DROP TABLE student;"
 
-sql = "INSERT INTO student_category VALUES (1,'Engineering'),(1,'Commerce/Business');"
+sql = "INSERT INTO student_course VALUES (1,'Business/Economics',87),(1,'English',89),(1,'Humanities',82),(1,'Information Technology/Programming',86),(1,'Maths',94),(1,'Sciences',91);"
 
 mycursor.execute(sql)
 
