@@ -284,11 +284,12 @@ def check_login_creds():
     password = request.json['password']
 
     student = Student.query.filter_by(email=email, password=password).first()
+    response = {"response":""}
 
     if bool(student) == True:
-        response = str(student.student_id)
+        response["response"] = str(student.student_id)
     else:
-        response = "Invalid credentials."
+        esponse["response"] = "Invalid credentials."
 
     return response
 
