@@ -289,9 +289,9 @@ def check_login_creds():
     if bool(student) == True:
         response["response"] = str(student.student_id)
     else:
-        esponse["response"] = "Invalid credentials."
+        response["response"] = "Invalid credentials."
 
-    return response
+    return jsonify(response)
 
 # ENDPOINT - Get all students
 @application.route('/students-all',methods=['GET'])
