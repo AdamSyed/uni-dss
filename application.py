@@ -633,9 +633,12 @@ def calc_program_match(id):
         coursename = Category_course.query.filter_by(category_name=s.category_name).all()    
         for c in coursename:
             print(c.course_name)
-            studentgrade = Student_course.query.get((1,c.course_name))
-            print(studentgrade.grade)
-            studarray = np.append(studarray,[studentgrade.grade], axis= 0)
+            try:
+                studentgrade = Student_course.query.get((s.student_id,c.course_name))
+                print(studentgrade.grade)
+                studarray = np.append(studarray,[studentgrade.grade], axis= 0)
+            except:
+                print('student had not taken course')
         print(studarray)
         averagescore = sum(studarray)/len(studarray)
         print(str(averagescore))
