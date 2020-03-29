@@ -327,47 +327,47 @@ def add_student():
         db.session.add(new_student_course)
         db.session.commit()        
 
-    if science is true:
+    if science is True:
         new_student_category=Student_category(student_id,'Science')
         db.session.add(new_student_category)
         db.session.commit()
-    if arts is true:
+    if arts is True:
         new_student_category=Student_category(student_id,'Arts')
         db.session.add(new_student_category)
         db.session.commit()
-    if engineering is true:
+    if engineering is True:
         new_student_category=Student_category(student_id,'Engineering')
         db.session.add(new_student_category)
         db.session.commit()
-    if commerce_business is true:
+    if commerce_business is True:
         new_student_category=Student_category(student_id,'Commerce/Business')
         db.session.add(new_student_category)
         db.session.commit()
-    if architecture is true:
+    if architecture is True:
         new_student_category=Student_category(student_id,'Architecture')
         db.session.add(new_student_category)
         db.session.commit()
-    if math is true:
+    if math is True:
         new_student_category=Student_category(student_id,'Math')
         db.session.add(new_student_category)
         db.session.commit()
-    if technology is true:
+    if technology is True:
         new_student_category=Student_category(student_id,'Technology')
         db.session.add(new_student_category)
         db.session.commit()
-    if nursing is true:
+    if nursing is True:
         new_student_category=Student_category(student_id,'Nursing')
         db.session.add(new_student_category)
         db.session.commit()
-    if environment is true:
+    if environment is True:
         new_student_category=Student_category(student_id,'Environment')
         db.session.add(new_student_category)
         db.session.commit()
-    if health is true:
+    if health is True:
         new_student_category=Student_category(student_id,'Health')
         db.session.add(new_student_category)
         db.session.commit()
-    if public_affairs is true:
+    if public_affairs is True:
         new_student_category=Student_category(student_id,'Public Affairs')
         db.session.add(new_student_category)
         db.session.commit()
