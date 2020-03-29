@@ -15,6 +15,6 @@ conn = pymysql.connect(host, user = user, port = port, passwd = password, db=dbn
 
 # response = pd.read_sql("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'uni_dss';",con=conn)
 
-response = pd.read_sql("SELECT * FROM student_course WHERE student_course.student_id=1",con=conn)
+response = pd.read_sql("SELECT * FROM student WHERE student.student_id=1",con=conn)
 
 print(response)

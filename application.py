@@ -435,7 +435,7 @@ def get_student(id):
             output.update({'public_affairs': True})
         else:
             output.update({category.category_name : True})
-            
+
     return json.dumps(output)
 
 # ENDPOINT - Update a Student
@@ -682,7 +682,7 @@ def calc_program_match(id):
     }    
     print(output)
         
-    return json.dumps(resp)
+    return jsonify(resp)
 
 # Run server
 if __name__ == '__main__':
