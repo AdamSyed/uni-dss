@@ -270,13 +270,109 @@ def add_student():
     d_city_cost = request.json['d_city_cost']
     d_co_op_availability = request.json['d_co_op_availability']
 
+    sciences = request.json['sciences']
+    maths = request.json['maths']
+    english = request.json['english']
+    business_economics = request.json['business_economics']
+    humanities = request.json['humanities']
+    design = request.json['design']
+    it_programming = request.json['it_programming']
+
+    science = request.json['science']
+    arts = request.json['arts']
+    engineering = request.json['engineering']
+    commerce_business = request.json['commerce_business']
+    architecture = request.json['architecture']
+    math = request.json['math']
+    technology = request.json['technology']
+    nursing = request.json['nursing']
+    environment = request.json['environment']
+    health = request.json['health']
+    public_affairs = request.json['public_affairs']
+
 
     new_student = Student(first_name,last_name,email,password,age,d_education_quality,d_ec_opportunity,d_wellbeing,d_community,d_city_size,d_school_size,d_campus_age,d_student_prof_ratio,d_scholarship_likelihood,d_city_cost,d_co_op_availability)
 
     db.session.add(new_student)
     db.session.commit()
+    
+    student_id = Student.query.filter_by(email = email).first().student_id
 
-    return student_schema.jsonify(new_student)
+    if sciences is not None:
+        new_student_course = Student_course(student_id,'Sciences',sciences)
+        db.session.add(new_student_course)
+        db.session.commit()
+    if maths is not None:
+        new_student_course = Student_course(student_id,'Maths',maths)
+        db.session.add(new_student_course)
+        db.session.commit()
+    if english is not None:
+        new_student_course = Student_course(student_id,'English',english)
+        db.session.add(new_student_course)
+        db.session.commit()
+    if business_economics is not None:
+        new_student_course = Student_course(student_id,'Business/Economics',business_economics)
+        db.session.add(new_student_course)
+        db.session.commit()
+    if humanities is not None:
+        new_student_course = Student_course(student_id,'Humanities',humanities)
+        db.session.add(new_student_course)
+        db.session.commit()
+    if design is not None:
+        new_student_course = Student_course(student_id,'Design',design)
+        db.session.add(new_student_course)
+        db.session.commit()      
+    if it_programming is not None:
+        new_student_course = Student_course(student_id,'Information Technology/Programming',it_programming)
+        db.session.add(new_student_course)
+        db.session.commit()        
+
+    if science is true:
+        new_student_category=Student_category(student_id,'Science')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if arts is true:
+        new_student_category=Student_category(student_id,'Arts')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if engineering is true:
+        new_student_category=Student_category(student_id,'Engineering')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if commerce_business is true:
+        new_student_category=Student_category(student_id,'Commerce/Business')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if architecture is true:
+        new_student_category=Student_category(student_id,'Architecture')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if math is true:
+        new_student_category=Student_category(student_id,'Math')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if technology is true:
+        new_student_category=Student_category(student_id,'Technology')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if nursing is true:
+        new_student_category=Student_category(student_id,'Nursing')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if environment is true:
+        new_student_category=Student_category(student_id,'Environment')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if health is true:
+        new_student_category=Student_category(student_id,'Health')
+        db.session.add(new_student_category)
+        db.session.commit()
+    if public_affairs is true:
+        new_student_category=Student_category(student_id,'Public Affairs')
+        db.session.add(new_student_category)
+        db.session.commit()
+
+    return json.dumps({'response':student_id})
 
 # ENDPOINT - Login
 @application.route('/login', methods=['POST'])
@@ -386,11 +482,11 @@ def calc_uni_match(id):
     return jsonify(outList)
 
 #ENDPOINT - get data to calculate scores for matching algorithm
-@application.route('/program-matching', methods = ['GET'])
-def calc_program_match():
+@application.route('/program-matching/<id>', methods = ['GET'])
+def calc_program_match(id):
     studarray = np.array([])
     progarray = np.array([])
-    student = Student_category.query.filter_by(student_id=1).all()
+    student = Student_category.query.filter_by(student_id=id).all()
     for s in student:
         print(str(s.student_id) + ',' + s.category_name)
         coursename = Category_course.query.filter_by(category_name=s.category_name).all()    
