@@ -421,10 +421,21 @@ def get_student(id):
     print(type(output))
     student_courses = Student_course.query.filter_by(student_id = student.student_id).all()
     for course in student_courses:
-        output.update({course.course_name :  course.grade})
+        if course.course_name == "Business/Economics":
+            output.update({'business_economics':course.grade})
+        elif course.course_name == "Information Technology/Programming":
+            output.update({'it_programming':course.grade})
+        else:
+            output.update({course.course_name :  course.grade})
     student_categories = Student_category.query.filter_by(student_id = student.student_id).all()
     for category in student_categories:
-        output.update({category.category_name : True})
+        if category.category_name =="Commerce/Business":
+            output.update({'commerce_business':True})
+        elif category.category_name =="Public Affairs":
+            output.update({'public_affairs': True})
+        else:
+            output.update({category.category_name : True})
+            
     return json.dumps(output)
 
 # ENDPOINT - Update a Student
