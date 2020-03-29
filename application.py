@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import numpy as np
 import json
+import requests
 # import os
 
 # Initiate application
@@ -384,7 +385,67 @@ def calc_uni_match(id):
     ###return universities_schema.jsonify(outList)
     return jsonify(outList)
 
-
+#ENDPOINT - get data to calculate scores for matching algorithm
+@application.route('/program-matching', methods = ['GET'])
+def calc_program_match():
+    studarray = np.array([])
+    progarray = np.array([])
+    student = Student_category.query.filter_by(student_id=1).all()
+    for s in student:
+        print(str(s.student_id) + ',' + s.category_name)
+        coursename = Category_course.query.filter_by(category_name=s.category_name).all()    
+        for c in coursename:
+            print(c.course_name)
+            studentgrade = Student_course.query.get((1,c.course_name))
+            print(studentgrade.grade)
+            studarray = np.append(studarray,[studentgrade.grade], axis= 0)
+        print(studarray)
+        averagescore = sum(studarray)/len(studarray)
+        print(str(averagescore))
+        programlist = Program_category.query.filter_by(category_name=s.category_name).all()
+        for p in programlist:
+            programname = Program.query.filter_by(program_id = p.program_id,).all()
+            for g in programname:
+                if g.acceptance_grade <= averagescore:
+                    progarray = np.append(progarray,[g.program_id], axis=0)
+        
+    url = "http://uni-dss-api.us-east-1.elasticbeanstalk.com/uni-matching/"
+    r = requests.get(url = (url + str(s.student_id)))
+    data = r.json()
+    output = []
+    print(data)
+    print (progarray)
+    print(len(progarray))
+    print(int(progarray[0]))
+    print(Program.query.filter_by(program_id = int(progarray[0])).first().university_id)
+    print(University.query.filter_by(university_name = data[0]).first().university_id)
+    for i in range(3):
+        uni_programs_match = []
+        for p in progarray:
+            # print(str(Program.query.filter_by(program_id = p).first().university_id))
+            if (Program.query.filter_by(program_id = int(p)).first().university_id) == (University.query.filter_by(university_name = data[i]).first().university_id):
+                uni_programs_match.append([int(p),Program.query.filter_by(program_id = int(p)).first().acceptance_grade])
+        # print(uni_programs_match)
+        try:
+            uni_programs_match.sort(key=lambda x:x[1], reverse=True)
+        except:
+            print('an error occured')
+        print(uni_programs_match)
+        this_uni_top_programs = []
+        for x in range(3):
+            try:
+                this_uni_top_programs.append((Program.query.filter_by(program_id = uni_programs_match[x][0]).first().program_name))
+            except:
+                print('not enough programs at uni')
+        output.append(this_uni_top_programs)
+    resp = {
+        'uni1': output[0],
+        'uni2': output[1],
+        'uni3': output[2]
+    }    
+    print(output)
+        
+    return json.dumps(resp)
 
 # Run server
 if __name__ == '__main__':
