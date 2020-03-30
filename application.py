@@ -627,8 +627,9 @@ def calc_uni_match(id):
 def calc_program_match(id):
     studarray = np.array([])
     progarray = np.array([])
-    student = Student_category.query.filter_by(student_id=id).all()
-    for s in student:
+    student = Student.query.get(id)
+    student_categories = Student_category.query.filter_by(student_id=id).all()
+    for s in student_categories:
         print(str(s.student_id) + ',' + s.category_name)
         coursename = Category_course.query.filter_by(category_name=s.category_name).all()    
         for c in coursename:
