@@ -644,11 +644,18 @@ def calc_program_match(id):
         print(str(averagescore))
         programlist = Program_category.query.filter_by(category_name=s.category_name).all()
         for p in programlist:
-            programname = Program.query.filter_by(program_id = p.program_id,).all()
-            for g in programname:
-                if g.acceptance_grade <= averagescore:
-                    progarray = np.append(progarray,[g.program_id], axis=0)
-        
+            if student.d_co_op_availability == True:
+                programname = Program.query.filter_by(program_id = p.program_id,co_op_availability=student.d_co_op_availability).all()
+                for g in programname:
+                    if g.acceptance_grade <= averagescore:
+                        progarray = np.append(progarray,[g.program_id], axis=0)
+            if student.d_co_op_availability == False:
+                programname2 = Program.query.filter_by(program_id = p.program_id).all()
+                for h in programname2:
+                    if h.acceptance_grade <= averagescore:
+                        progarray = np.append(progarray,[g.program_id], axis=0)
+        studarray=[]
+
     url = "http://uni-dss-api.us-east-1.elasticbeanstalk.com/uni-matching/"
     r = requests.get(url = (url + str(s.student_id)))
     data = r.json()
