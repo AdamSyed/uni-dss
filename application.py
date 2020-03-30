@@ -626,7 +626,7 @@ def calc_uni_match(id):
 @application.route('/program-matching/<id>', methods = ['GET'])
 def calc_program_match(id):
     studarray = np.array([])
-    progarray = np.array([])
+    progarray = []
     student = Student.query.get(id)
     student_categories = Student_category.query.filter_by(student_id=id).all()
     for s in student_categories:
@@ -649,12 +649,12 @@ def calc_program_match(id):
                 programname = Program.query.filter_by(program_id = p.program_id,co_op_availability=student.d_co_op_availability).all()
                 for g in programname:
                     if g.acceptance_grade <= averagescore:
-                        progarray = np.append(progarray,[g.program_id], axis=0)
+                        progarray.append(g.program_id)
             if student.d_co_op_availability == False:
                 programname2 = Program.query.filter_by(program_id = p.program_id).all()
                 for h in programname2:
                     if h.acceptance_grade <= averagescore:
-                        progarray = np.append(progarray,[g.program_id], axis=0)
+                        progarray.append(h.program_id)
         studarray=[]
 
     url = "http://uni-dss-api.us-east-1.elasticbeanstalk.com/uni-matching/"
