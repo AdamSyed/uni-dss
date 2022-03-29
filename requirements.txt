@@ -32,7 +32,7 @@ marshmallow==3.5.1
 marshmallow-sqlalchemy==0.22.3
 numpy==1.18.1
 pandas==1.0.2
-paramiko==2.7.1
+paramiko==2.10.1
 pathspec==0.5.9
 pycparser==2.20
 PyMySQL==0.9.3
